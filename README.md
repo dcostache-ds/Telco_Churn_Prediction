@@ -1,35 +1,35 @@
 # 📊 Customer Churn Prediction — End-to-End ML Project
 
-Un proiect complet de Machine Learning care prezice dacă un client al unei companii de telecomunicații va pleca sau nu, bazat pe datele istorice ale acestuia.
+A complete Machine Learning project that predicts whether a telecom customer will churn (leave the company) based on their historical data.
 
 ---
 
-## 🎯 Problema de Business
+## 🎯 Business Problem
 
-O companie de telecomunicații pierde clienți lunar. Costă de **5-10x mai mult** să atragi un client nou decât să păstrezi unul existent. Dacă putem prezice **din timp** cine va pleca, putem interveni cu oferte personalizate înainte să fie prea târziu.
+A telecommunications company loses customers every month. It costs **5-10x more** to acquire a new customer than to retain an existing one. If we can predict **in advance** who is likely to leave, we can intervene with personalized offers before it's too late.
 
-**Soluția**: Un model ML antrenat pe 7043 de clienți reali care prezice probabilitatea de churn și simulează impactul diferitelor intervenții (reducere preț, schimbare contract).
+**Solution**: An ML model trained on 7,043 real customers that predicts churn probability and simulates the impact of different interventions (price reduction, contract upgrade).
 
 ---
 
-## 📁 Structura Proiectului
+## 📁 Project Structure
 
 ```
 churn-prediction/
 ├── data/
-│   ├── Telco-Customer-Churn.csv      # Dataset original
-│   └── processed/                     # Date procesate (generate automat)
+│   ├── Telco-Customer-Churn.csv      # Original dataset
+│   └── processed/                     # Processed data (auto-generated)
 │       ├── X_train.csv
 │       ├── X_test.csv
 │       ├── y_train.csv
 │       └── y_test.csv
 ├── notebooks/
 │   ├── 01_eda.ipynb                   # Exploratory Data Analysis
-│   ├── 02_preprocessing.ipynb         # Curatare, Encoding, Scalare, SMOTE
-│   └── 03_modeling.ipynb              # Antrenare si comparare modele
+│   ├── 02_preprocessing.ipynb         # Cleaning, Encoding, Scaling, SMOTE
+│   └── 03_modeling.ipynb              # Model training and comparison
 ├── dashboard/
-│   └── app.py                         # Interfata Streamlit
-├── models/                            # Generate automat dupa rularea notebooks
+│   └── app.py                         # Streamlit interface
+├── models/                            # Auto-generated after running notebooks
 │   ├── best_model.pkl
 │   ├── best_model_name.pkl
 │   ├── scaler.pkl
@@ -41,50 +41,50 @@ churn-prediction/
 
 ## 🗂️ Dataset
 
-**IBM Telco Customer Churn** — disponibil pe [Kaggle](https://www.kaggle.com/datasets/blastchar/telco-customer-churn)
+**IBM Telco Customer Churn** — available on [Kaggle](https://www.kaggle.com/datasets/blastchar/telco-customer-churn)
 
-| Proprietate | Valoare |
+| Property | Value |
 |---|---|
-| Sursa | IBM / Kaggle |
-| Clienti | 7.043 |
-| Features | 21 coloane |
+| Source | IBM / Kaggle |
+| Customers | 7,043 |
+| Features | 21 columns |
 | Target | Churn (Yes/No) |
 | Churn Rate | ~26.54% |
 
-**Tipuri de features:**
-- **Demografice**: gen, varsta, partener, dependenti
-- **Servicii**: internet, telefonie, streaming, securitate
-- **Contract**: tip contract, metoda de plata, facturare
-- **Financiare**: taxa lunara, taxa totala, durata abonament
+**Feature types:**
+- **Demographics**: gender, age, partner, dependents
+- **Services**: internet, phone, streaming, online security
+- **Contract**: contract type, payment method, billing
+- **Financial**: monthly charges, total charges, tenure
 
 ---
 
-## 🔄 Pipeline ML
+## 🔄 ML Pipeline
 
 ### 1. EDA (01_eda.ipynb)
-- Analiza distributiei target-ului (26.54% churn)
-- Vizualizarea relatiei dintre features si churn
-- Identificarea problemelor din date
+- Target distribution analysis (26.54% churn)
+- Feature vs churn visualizations
+- Data quality issues identification
 
-**Insight-uri principale:**
-- Clientii noi (tenure mic) pleaca cel mai des — 50/50 in prima luna
-- Contract lunar = risc maxim (42.71% churn vs 2.83% la 2 ani)
-- Clientii cu factura mare (>80$/luna) au risc ridicat
-- Fiber optic are cel mai mare churn rate din tipurile de internet
+**Key insights:**
+- New customers (low tenure) churn the most — 50/50 chance in the first month
+- Month-to-month contract = highest risk (42.71% churn vs 2.83% for 2-year contracts)
+- Customers with high monthly charges (>$80) have elevated risk
+- Fiber optic has the highest churn rate among internet service types
 
 ### 2. Preprocessing (02_preprocessing.ipynb)
-| Pas | Ce face |
+| Step | What it does |
 |---|---|
-| Curatare | Spatii ascunse → NaN, valori lipsa, outlieri, duplicate, text inconsistent |
-| Encoding | One-Hot Encoding cu `pd.get_dummies(drop_first=True)` |
-| Scalare | `StandardScaler` pe coloanele numerice |
-| Split | 80% train / 20% test cu `stratify=y` |
-| SMOTE | Echilibrare clase: 27% → 50% (doar pe train) |
+| Cleaning | Hidden spaces → NaN, missing values, outliers, duplicates, inconsistent text |
+| Encoding | One-Hot Encoding with `pd.get_dummies(drop_first=True)` |
+| Scaling | `StandardScaler` on numerical columns |
+| Split | 80% train / 20% test with `stratify=y` |
+| SMOTE | Class balancing: 27% → 50% (train set only) |
 
-**Rezultat:** 30 features, 8.274 exemple de antrenare (dupa SMOTE)
+**Result:** 30 features, 8,274 training samples (after SMOTE)
 
 ### 3. Modeling (03_modeling.ipynb)
-4 modele comparate pe aceleasi date:
+4 models compared on the same data:
 
 | Model | ROC-AUC | F1-Score | Recall | Accuracy |
 |---|---|---|---|---|
@@ -93,65 +93,65 @@ churn-prediction/
 | XGBoost | 0.8326 | 0.6132 | 0.6827 | 0.7708 |
 | Random Forest | 0.8308 | 0.5982 | 0.6213 | 0.7779 |
 
-**Model ales: Logistic Regression** — cel mai bun ROC-AUC si Recall.
+**Chosen model: Logistic Regression** — best ROC-AUC and Recall.
 
-> **De ce Recall conteaza mai mult decat Accuracy?**
-> Daca modelul zice mereu "clientul ramane", are 73% accuracy dar nu prinde niciun churner. Recall masoara cati churners reali am identificat corect — asta conteaza in business.
+> **Why Recall matters more than Accuracy?**
+> A model that always predicts "customer stays" achieves 73% accuracy but catches zero churners. Recall measures how many actual churners we correctly identified — that's what matters in business.
 
 ---
 
-## 🖥️ Dashboard Streamlit
+## 🖥️ Streamlit Dashboard
 
-Interfata interactiva cu **simulare What-If** — cel mai util feature al proiectului.
+Interactive interface with **What-If simulation** — the most useful feature of this project.
 
-### Cum functioneaza
-1. Introduci datele unui client (contract, servicii, pret, durata)
-2. Modelul calculeaza probabilitatea de churn
-3. Interfata simuleaza automat scenarii alternative:
-   - Ce se intampla daca schimbi contractul la 1 an / 2 ani?
-   - Ce se intampla daca scazi pretul cu 10% / 20% / 30%?
-   - Ce se intampla daca clientul sta inca 6 / 12 / 24 luni?
-4. Afiseaza cea mai buna interventie posibila cu impact numeric
+### How it works
+1. Enter a customer's data (contract, services, price, tenure)
+2. The model calculates the churn probability
+3. The interface automatically simulates alternative scenarios:
+   - What happens if you upgrade the contract to 1 year / 2 years?
+   - What happens if you reduce the price by 10% / 20% / 30%?
+   - What happens if the customer stays for another 6 / 12 / 24 months?
+4. Displays the best possible intervention with numeric impact
 
-### Pornire
+### Run the dashboard
 ```bash
 streamlit run dashboard/app.py
 ```
 
 ---
 
-## ⚙️ Instalare si Rulare
+## ⚙️ Installation & Setup
 
-### 1. Cloneaza proiectul
+### 1. Clone the repository
 ```bash
 git clone https://github.com/username/churn-prediction.git
 cd churn-prediction
 ```
 
-### 2. Mediu virtual
+### 2. Create a virtual environment
 ```bash
 python -m venv venv
 source venv/bin/activate        # Mac/Linux
 # venv\Scripts\activate         # Windows
 ```
 
-### 3. Instaleaza dependentele
+### 3. Install dependencies
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Descarca datasetul
-Descarca [Telco Customer Churn](https://www.kaggle.com/datasets/blastchar/telco-customer-churn) de pe Kaggle si pune fisierul in `data/Telco-Customer-Churn.csv`.
+### 4. Download the dataset
+Download [Telco Customer Churn](https://www.kaggle.com/datasets/blastchar/telco-customer-churn) from Kaggle and place the file in `data/Telco-Customer-Churn.csv`.
 
-### 5. Ruleaza notebooks (in ordine!)
+### 5. Run the notebooks (in order!)
 ```bash
 jupyter notebook
-# Ruleaza: 01_eda.ipynb → 02_preprocessing.ipynb → 03_modeling.ipynb
+# Run in order: 01_eda.ipynb → 02_preprocessing.ipynb → 03_modeling.ipynb
 ```
 
-> ⚠️ Trebuie rulat in ordine — fiecare notebook genereaza fisierele necesare pentru urmatorul.
+> ⚠️ Must be run in order — each notebook generates files needed by the next one.
 
-### 6. Porneste dashboard-ul
+### 6. Launch the dashboard
 ```bash
 streamlit run dashboard/app.py
 ```
@@ -160,35 +160,35 @@ streamlit run dashboard/app.py
 
 ## 🛠️ Tech Stack
 
-| Categorie | Librarii |
+| Category | Libraries |
 |---|---|
 | **Data** | pandas, numpy |
-| **Vizualizare** | matplotlib, seaborn |
+| **Visualization** | matplotlib, seaborn |
 | **ML** | scikit-learn, xgboost, lightgbm |
 | **Imbalanced data** | imbalanced-learn (SMOTE) |
-| **Salvare modele** | joblib |
+| **Model persistence** | joblib |
 | **Dashboard** | streamlit |
 
 ---
 
-## 📈 Rezultate Cheie
+## 📈 Key Results
 
-- **74.13% Recall** — modelul identifica corect 3 din 4 clienti care vor pleca
-- **85.17% ROC-AUC** — separare foarte buna intre churners si non-churners
-- **Simulare What-If** — schimbarea contractului din lunar in 2 ani reduce riscul cu pana la 60%
-- **Cel mai important factor**: tipul de contract (Month-to-month vs termen lung)
-
----
-
-## 📝 Lectii invatate
-
-- `pd.get_dummies()` pe un singur rand nu functioneaza corect la inferenta — solutia e constructia manuala a vectorului de features
-- SMOTE se aplica **doar pe train**, niciodata pe test
-- Recall > Accuracy pentru probleme cu clase dezechilibrate
-- `stratify=y` in train_test_split e critic pentru a pastra proportia claselor
+- **74.13% Recall** — the model correctly identifies 3 out of 4 customers who will churn
+- **85.17% ROC-AUC** — strong separation between churners and non-churners
+- **What-If simulation** — switching from a monthly to a 2-year contract reduces churn risk by up to 60%
+- **Most important factor**: contract type (Month-to-month vs long-term)
 
 ---
 
-## 👤 Autor
+## 📝 Key Learnings
 
-Proiect realizat ca parte a procesului de invatare Data Science / Machine Learning.
+- `pd.get_dummies()` on a single row doesn't work correctly at inference time — the solution is manually building the feature vector
+- SMOTE must be applied **only on the train set**, never on the test set
+- Recall > Accuracy for imbalanced class problems
+- `stratify=y` in `train_test_split` is critical to maintain class proportions in both sets
+
+---
+
+## 👤 Author
+
+Project built as part of a Data Science / Machine Learning learning journey.
